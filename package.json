@@ -1,0 +1,32 @@
+{
+  "name": "skerla-json-schema",
+  "version": "0.1.0",
+  "description": "JSON Schema validation",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainder/node-skerla-json-schema.git"
+  },
+  "keywords": [
+    "json",
+    "schema",
+    "validation"
+  ],
+  "author": "Andrius Skerla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rainder/node-skerla-json-schema/issues"
+  },
+  "homepage": "https://github.com/rainder/node-skerla-json-schema#readme"
+}
