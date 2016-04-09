@@ -237,11 +237,22 @@ describe('Schema', function () {
         })
       });
 
+      schema.validate({}).isValid().should.equals(true);
       schema.validate({ a: [] }).isValid().should.equals(true);
       schema.validate({ a: [{ b: 'asd' }] }).isValid().should.equals(true);
+      schema.validate({ a: ['a'] }).isValid().should.equals(false);
       schema.validate({ a: [{}] }).isValid().should.equals(false);
       schema.validate({ a: [{ b: '123' }, { b: '234' }] }).isValid().should.equals(true);
       schema.validate({ a: [{ b: '123' }, { b: '234' }, {}] }).isValid().should.equals(false);
+    });
+    it('should validate len', function () {
+      const schema = new V.Schema({
+        a: V(Array).len(3)
+      });
+
+      schema.validate({ a: [1, 2] }).isValid().should.equals(false);
+      schema.validate({ a: [1, 2, 3] }).isValid().should.equals(true);
+      schema.validate({ a: [1, 2, 3, 4] }).isValid().should.equals(false);
     });
   });
 

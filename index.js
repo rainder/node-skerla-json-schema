@@ -12,9 +12,4 @@ module.exports = function (type) {
   return new Rule(type);
 };
 
-//module.exports.Pipeline = function (pipeline) {
-//  return new Validation(pipeline);
-//};
-
-
 module.exports.Schema = Schema;
