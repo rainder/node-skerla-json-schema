@@ -456,6 +456,21 @@ describe('Schema', function () {
       });
     });
 
+    it('should remove unwanted child elements in an object 1', function () {
+      const schema = new V.Schema({
+        o: V(Object),
+        o2: {
+          a: V(String)
+        }
+      });
+
+      const result = schema.validate({}).cleanup();
+
+      result.should.deep.equals({
+        o: {},
+        o2: {}
+      });
+    });
 
   })
 
