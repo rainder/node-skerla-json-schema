@@ -1,4 +1,4 @@
-# JSON Schema validation
+# JSON Schema validation v0.2.0
 
 ## Installation
 
@@ -9,12 +9,15 @@ $ npm install skerla-json-schema
 ## Schema
 
 ### Constructor
-###### `new V.Schema(schema: Object): Schema`
+###### `new V.Schema(schema: Object|Array|Rule): Schema`
 
 ### Methods
-###### `validate(object: Object): ValidationResult`
+###### `validate(object: Object|Array): ValidationResult`
 
-### Esage example
+### Usage example
+
+General usecase
+
 ```js
 const V = require('skerla-json-validation');
 const validation = new V.Schema({
@@ -40,16 +43,31 @@ const validationResult = validation.validate({
 validationResult.isValid(); //true
 ```
 
+Advanced
+
+```js
+const V = require('skerla-json-validation');
+const validation = new V.Schema(V(Array).len(2).schema([
+  V(String).required(),
+  V(Number).required()
+]));
+
+validation.validate({}).isValid(); //false
+validation.validate([]).isValid(); //false
+validation.validate(['banana']).isValid(); //false
+validation.validate(['banana', 5]).isValid(); //true
+```
+
 ## ValidationResult
 ### Methods
 ###### `isValid(): Boolean`
 Returns if the object has passed validation process
 
-###### `getErrors(): Array{path: string, message: String}` 
+###### `getErrors(): Array{errno: Number, path: string, message: String}` 
 Returns validation errors
 
 ```js
-const V = require('./');
+const V = require('skerla-json-schema');
 const validation = new V.Schema({
   id: V(Number),
   name: V(String).min(3),
@@ -65,9 +83,9 @@ const isValid = validationResult.isValid(); //false
 const errors = validationResult.getErrors(); 
 /*
 [ 
-  { path: 'id', message: 'type of the value must be Number, got String.' },
-  { path: 'name', message: 'the length must be >= 3. Got 2.' },
-  { path: 'surname', message: 'required' } 
+  { errno: 2, path: 'id', message: 'type of the value must be Number, got String.' },
+  { errno: 6, path: 'name', message: 'the length must be >= 3, got 2.' },
+  { errno: 1, path: 'surname', message: 'required' } 
 ]
 */
 ```
@@ -173,6 +191,6 @@ new V.Schema({
 const Rule = require('skerla-json-schema/lib/rule');
 const rule = new Rule(String).oneOf(['hi', 'hello']).required();
 
-rule.check('', 'hi'); //true
-rule.check('', 'bonjour'); //throws
+rule.check('hi'); //true
+rule.check('bonjour'); //throws
 ```

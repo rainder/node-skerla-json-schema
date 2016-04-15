@@ -37,6 +37,50 @@ describe('Schema', function () {
     schema.validate({ a: 'string' }).getErrors()[0].message.should.match(/or Null/);
   });
 
+  describe('array schema', function () {
+    it('should validate pure array of strings', function () {
+      const schema = new V.Schema(V(Array).typeOf(String));
+
+      schema.validate().isValid().should.equals(true);
+      schema.validate({}).isValid().should.equals(false);
+      schema.validate([]).isValid().should.equals(true);
+      schema.validate(['asd', 'asd']).isValid().should.equals(true);
+      schema.validate(['asd', 'asd']).isValid().should.equals(true);
+      schema.validate([3]).isValid().should.equals(false);
+    });
+    it('should validate pure array of strings 2', function () {
+      const schema = new V.Schema([
+        V(String).typeOf(String)
+      ]);
+
+      schema.validate([]).isValid().should.equals(true);
+      schema.validate(['asd', 'asd']).isValid().should.equals(true);
+      schema.validate(['asd', 'asd']).isValid().should.equals(true);
+      schema.validate([3]).isValid().should.equals(false);
+    });
+    it('should validate an array len 2 string,number', function () {
+      _with(new V.Schema(V(Array).len(2).schema([
+        V(String).required(),
+        V(Number).required()
+      ])), function (schema) {
+        schema.validate([]).isValid().should.equals(false);
+        schema.validate(['asd', 1]).isValid().should.equals(true);
+        schema.validate(['asd', 'asd']).isValid().should.equals(false);
+        schema.validate([3, 3]).isValid().should.equals(false);
+      });
+    });
+    it('should properly format an error', function () {
+      _with(new V.Schema(V(Object).schema({
+        a: V(String)
+      })), function (schema) {
+        schema.validate({ a: 4 }).isValid().should.equals(false);
+        schema.validate({ a: '1' }).isValid().should.equals(true);
+        schema.validate({ a: 4 }).getErrors()[0].path.should.equals('a');
+      });
+    });
+  })
+
+
   describe('String', function () {
     it('should validate type', function () {
       const schema = new V.Schema({
@@ -100,7 +144,7 @@ describe('Schema', function () {
       schema.validate({ a: '1234' }).isValid().should.equals(false);
       schema.validate({ a: '123456' }).isValid().should.equals(false);
     });
-  })
+  });
   describe('Number', function () {
     it('should validate number', function () {
       const schema = new V.Schema({
@@ -253,6 +297,33 @@ describe('Schema', function () {
       schema.validate({ a: [1, 2] }).isValid().should.equals(false);
       schema.validate({ a: [1, 2, 3] }).isValid().should.equals(true);
       schema.validate({ a: [1, 2, 3, 4] }).isValid().should.equals(false);
+    });
+    it('should validate an array contents', function () {
+      _with(new V.Schema({
+        a: [V(Number)]
+      }), function (schema) {
+        schema.validate({ a: [1] }).isValid().should.equals(true);
+        schema.validate({ a: [] }).isValid().should.equals(true);
+        schema.validate({ a: [[1, 4, 'a']] }).isValid().should.equals(false);
+      });
+
+      _with(new V.Schema({
+        a: [V(Number).required()]
+      }), function (schema) {
+        schema.validate({ a: [] }).isValid().should.equals(false);
+      });
+
+      _with(new V.Schema({
+        a: [V(String).required(), V(Number), V(Number)]
+      }), function (schema) {
+        schema.validate({ a: [] }).isValid().should.equals(false);
+        schema.validate({ a: [''] }).isValid().should.equals(true);
+        schema.validate({ a: ['', ''] }).isValid().should.equals(false);
+        schema.validate({ a: ['', 1] }).isValid().should.equals(true);
+        schema.validate({ a: ['', 1, ''] }).isValid().should.equals(false);
+        schema.validate({ a: ['', 1, 2] }).isValid().should.equals(true);
+        schema.validate({ a: ['', 1, 2, 3] }).isValid().should.equals(true);
+      });
     });
   });
 
@@ -430,8 +501,7 @@ describe('Schema', function () {
         items: [{ name: V(String) }]
       });
 
-      const validationResult = schema.validate({
-      });
+      const validationResult = schema.validate({});
 
       const result = validationResult.cleanup();
 
@@ -472,6 +542,25 @@ describe('Schema', function () {
       });
     });
 
-  })
+    it('should cleanup array if passed as a first argument', function () {
+      _with(new V.Schema([
+        V(Number)
+      ]), schema => {
+        schema.validate([4]).cleanup().should.deep.equals([4]);
+        schema.validate([4, 4]).cleanup().should.deep.equals([4]);
+      });
+
+      _with(new V.Schema([
+        V(Number),
+        V(String)
+      ]), schema => {
+        schema.validate([4, 'asd', 'cxc']).cleanup().should.deep.equals([4, 'asd']);
+      });
+    });
+  });
 
 });
+
+function _with(obj, fn) {
+  fn(obj);
+}
