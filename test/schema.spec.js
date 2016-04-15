@@ -369,6 +369,94 @@ describe('Schema', function () {
       });
     });
 
+    it('should remove unwanted child elements in an array', function () {
+      const schema = new V.Schema({
+        items: V(Array).schema({
+          name: V(String)
+        })
+      });
+
+      const validationResult = schema.validate({
+        items: [{ name: 'asd', surname: 'asd' }]
+      });
+
+      const result = validationResult.cleanup();
+
+      result.should.deep.equals({
+        items: [{
+          name: 'asd'
+        }]
+      });
+    });
+
+    it('should remove unwanted child elements in an array 2', function () {
+      const schema = new V.Schema({
+        items: [{
+          name: V(String)
+        }]
+      });
+
+      const validationResult = schema.validate({
+        items: [{ name: 'asd', surname: 'asd' }]
+      });
+
+      const result = validationResult.cleanup();
+
+      result.should.deep.equals({
+        items: [{
+          name: 'asd'
+        }]
+      });
+    });
+
+    it('should remove unwanted child elements in an array 3', function () {
+      const schema = new V.Schema({
+        items: [{ name: V(String) }]
+      });
+
+      const validationResult = schema.validate({
+        items: []
+      });
+
+      const result = validationResult.cleanup();
+
+      result.should.deep.equals({
+        items: []
+      });
+    });
+
+    it('should remove unwanted child elements in an array 4', function () {
+      const schema = new V.Schema({
+        items: [{ name: V(String) }]
+      });
+
+      const validationResult = schema.validate({
+      });
+
+      const result = validationResult.cleanup();
+
+      result.should.deep.equals({
+        items: []
+      });
+    });
+
+    it('should remove unwanted child elements in an array 5', function () {
+      const schema = new V.Schema({
+        items: V(Array).schema({ name: V(String) })
+      });
+
+      const validationResult = schema.validate({
+        items: null
+      });
+
+      const result = validationResult.cleanup();
+
+      result.should.deep.equals({
+        items: []
+      });
+    });
+
+
   })
 
 });
