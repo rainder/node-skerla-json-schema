@@ -626,6 +626,38 @@ describe('Schema', function () {
         }
       });
     });
+    it('should return specs for a schema 4', function () {
+      const validation = new V.Schema({
+        o: {
+          a: V(Array).required().null().schema({
+            name: V(String).min(2)
+          })
+        }
+      });
+
+      jsonify(validation.getSpecs()).should.deep.equals({
+        o: {
+          required: false,
+          null: false,
+          type: 'Object',
+          child: {
+            a: {
+              type: 'Array',
+              required: true,
+              null: true,
+              child: {
+                name: {
+                  type: 'String',
+                  required: false,
+                  null: false,
+                  min: 2
+                }
+              }
+            }
+          }
+        }
+      });
+    });
 
   })
 });
