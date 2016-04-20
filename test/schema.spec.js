@@ -559,6 +559,21 @@ describe('Schema', function () {
     });
   });
 
+  describe('getSpecs', function () {
+    it('should return specs for a schema 1', function *() {
+      const validation = new V.Schema({
+        a: V(String).required()
+      });
+
+      validation.getSpecs().should.deep.equals({
+        a: {
+          required: true,
+          type: 'String'
+        }
+      });
+    });
+
+  })
 });
 
 function _with(obj, fn) {
