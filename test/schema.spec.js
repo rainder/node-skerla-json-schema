@@ -560,15 +560,69 @@ describe('Schema', function () {
   });
 
   describe('getSpecs', function () {
-    it('should return specs for a schema 1', function *() {
+    it('should return specs for a schema 1', function () {
       const validation = new V.Schema({
         a: V(String).required()
       });
 
-      validation.getSpecs().should.deep.equals({
+      jsonify(validation.getSpecs()).should.deep.equals({
         a: {
           required: true,
+          null: false,
           type: 'String'
+        }
+      });
+    });
+    it('should return specs for a schema 2', function () {
+      const validation = new V.Schema({
+        o: V(Object).schema({
+          o2: V(Object)
+        })
+      });
+
+      jsonify(validation.getSpecs()).should.deep.equals({
+        o: {
+          required: false,
+          null: false,
+          type: 'Object',
+          child: {
+            o2: {
+              required: false,
+              null: false,
+              type: 'Object'
+            }
+          }
+        }
+      });
+    });
+    it('should return specs for a schema 3', function () {
+      const validation = new V.Schema({
+        o: {
+          o2: V(Object).schema({
+            o3: V(Object)
+          })
+        }
+      });
+
+      jsonify(validation.getSpecs()).should.deep.equals({
+        o: {
+          required: false,
+          null: false,
+          type: 'Object',
+          child: {
+            o2: {
+              required: false,
+              null: false,
+              type: 'Object',
+              child: {
+                o3: {
+                  required: false,
+                  null: false,
+                  type: 'Object'
+                }
+              }
+            }
+          }
         }
       });
     });
@@ -578,4 +632,8 @@ describe('Schema', function () {
 
 function _with(obj, fn) {
   fn(obj);
+}
+
+function jsonify(object) {
+  return JSON.parse(JSON.stringify(object));
 }
