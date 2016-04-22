@@ -13,6 +13,7 @@ $ npm install skerla-json-schema
 
 ### Methods
 ###### `validate(object: Object|Array): ValidationResult`
+###### `getSpecs(): Object`
 
 ### Usage example
 

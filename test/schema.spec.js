@@ -566,10 +566,15 @@ describe('Schema', function () {
       });
 
       jsonify(validation.getSpecs()).should.deep.equals({
-        a: {
-          required: true,
-          null: false,
-          type: 'String'
+        type: 'Object',
+        required: false,
+        null: false,
+        child: {
+          a: {
+            required: true,
+            null: false,
+            type: 'String'
+          }
         }
       });
     });
@@ -581,15 +586,20 @@ describe('Schema', function () {
       });
 
       jsonify(validation.getSpecs()).should.deep.equals({
-        o: {
-          required: false,
-          null: false,
-          type: 'Object',
-          child: {
-            o2: {
-              required: false,
-              null: false,
-              type: 'Object'
+        type: 'Object',
+        null: false,
+        required: false,
+        child: {
+          o: {
+            required: false,
+            null: false,
+            type: 'Object',
+            child: {
+              o2: {
+                required: false,
+                null: false,
+                type: 'Object'
+              }
             }
           }
         }
@@ -605,24 +615,30 @@ describe('Schema', function () {
       });
 
       jsonify(validation.getSpecs()).should.deep.equals({
-        o: {
-          required: false,
-          null: false,
-          type: 'Object',
-          child: {
-            o2: {
-              required: false,
-              null: false,
-              type: 'Object',
-              child: {
-                o3: {
-                  required: false,
-                  null: false,
-                  type: 'Object'
+        type: 'Object',
+        null: false,
+        required: false,
+        child: {
+          o: {
+            required: false,
+            null: false,
+            type: 'Object',
+            child: {
+              o2: {
+                required: false,
+                null: false,
+                type: 'Object',
+                child: {
+                  o3: {
+                    required: false,
+                    null: false,
+                    type: 'Object'
+                  }
                 }
               }
             }
           }
+
         }
       });
     });
@@ -636,24 +652,71 @@ describe('Schema', function () {
       });
 
       jsonify(validation.getSpecs()).should.deep.equals({
-        o: {
-          required: false,
-          null: false,
-          type: 'Object',
-          child: {
-            a: {
-              type: 'Array',
-              required: true,
-              null: true,
-              child: {
-                name: {
-                  type: 'String',
-                  required: false,
-                  null: false,
-                  min: 2
+        type: 'Object',
+        null: false,
+        required: false,
+        child: {
+          o: {
+            required: false,
+            null: false,
+            type: 'Object',
+            child: {
+              a: {
+                type: 'Array',
+                required: true,
+                null: true,
+                child: {
+                  name: {
+                    type: 'String',
+                    required: false,
+                    null: false,
+                    min: 2
+                  }
                 }
               }
             }
+          }
+        }
+      });
+    });
+    it('should return specs for a schema 5', function () {
+      const validation = new V.Schema([
+        V(Number),
+        V(String)
+      ]);
+
+      jsonify(validation.getSpecs()).should.deep.equals({
+        type: 'Array',
+        required: false,
+        null: false,
+        child: [
+          {
+            'null': false,
+            'required': false,
+            'type': 'Number'
+          },
+          {
+            'null': false,
+            'required': false,
+            'type': 'String'
+          }
+        ]
+      });
+    });
+    it('should return specs for a schema 6', function () {
+      const validation = new V.Schema(V(Array).required().schema({
+        a: V(String)
+      }));
+
+      jsonify(validation.getSpecs()).should.deep.equals({
+        null: false,
+        required: true,
+        type: 'Array',
+        child: {
+          a: {
+            type: 'String',
+            required: false,
+            null: false
           }
         }
       });
