@@ -1,3 +1,7 @@
+# 0.3.0
+
+* added `Schema.getSpecs()` method
+
 # 0.2.0
 
 * added errno
