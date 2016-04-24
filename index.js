@@ -1,6 +1,5 @@
 'use strict';
 
-//const Validation = require('./lib/validation');
 const Rule = require('./lib/rule');
 const Schema = require('./lib/schema');
 
