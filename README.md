@@ -12,8 +12,12 @@ $ npm install skerla-json-schema
 ###### `new V.Schema(schema: Object|Array|Rule): Schema`
 
 ### Methods
+
 ###### `validate(object: Object|Array): ValidationResult`
+validates a given object and returns an instances of `ValidationResult`
+
 ###### `getSpecs(): Object`
+Returns an object describing specification of the schema.
 
 ### Usage example
 
