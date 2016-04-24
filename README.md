@@ -1,4 +1,4 @@
-# JSON Schema validation v0.2.0
+# JSON Schema validation v0.3.0
 
 ## Installation
 
