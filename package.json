@@ -1,6 +1,6 @@
 {
   "name": "skerla-json-schema",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "JSON Schema validation",
   "main": "index.js",
   "directories": {
