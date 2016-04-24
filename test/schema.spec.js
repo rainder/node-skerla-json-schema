@@ -79,8 +79,6 @@ describe('Schema', function () {
       });
     });
   })
-
-
   describe('String', function () {
     it('should validate type', function () {
       const schema = new V.Schema({
@@ -326,9 +324,7 @@ describe('Schema', function () {
       });
     });
   });
-
-
-  describe('strict', function () {
+  describe('cleanup', function () {
     it('should remove unwanted keys', function () {
       const schema = new V.Schema({
         a: V(String)
@@ -558,7 +554,6 @@ describe('Schema', function () {
       });
     });
   });
-
   describe('getSpecs', function () {
     it('should return specs for a schema 1', function () {
       const validation = new V.Schema({
