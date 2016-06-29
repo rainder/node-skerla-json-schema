@@ -540,12 +540,9 @@ describe('Schema', function () {
         }
       });
 
-      const result = schema.validate({}).cleanup();
+      const result = schema.validate({ d: 4 }).cleanup();
 
-      result.should.deep.equals({
-        o: {},
-        o2: {}
-      });
+      result.should.deep.equals({});
     });
 
     it('should cleanup array if passed as a first argument', function () {
