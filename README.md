@@ -133,7 +133,7 @@ const cleanedUp = validationResult.cleanup();
 
 ## Rule
 ### Methods
-###### `required(): Rule`
+###### `required(value: Boolean = true): Rule`
 Defines if the property can not be undefined
 
 ###### `min(value: Number): Rule`

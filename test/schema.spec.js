@@ -123,6 +123,16 @@ describe('Schema', function () {
       schema.validate({ a: 'three' }).isValid().should.equals(false);
     });
 
+    it('should validate oneOf with Set', function () {
+      const schema = new V.Schema({
+        a: V(String).oneOf(new Set(['one', 'two']))
+      });
+
+      schema.validate({ a: 'one' }).isValid().should.equals(true);
+      schema.validate({ a: 'two' }).isValid().should.equals(true);
+      schema.validate({ a: 'three' }).isValid().should.equals(false);
+    });
+
     it('should validate match', function () {
       const schema = new V.Schema({
         a: V(String).match(/^\d+$/)
