@@ -39,7 +39,7 @@ describe('Schema', function () {
 
   it('should validate using custom logic', function () {
     const schema = new V.Schema({
-      a: V(Function).fn((value, path) => {
+      a: V(Function).typeOf([String, Number]).fn((value, path) => {
         const number = +value;
         const string = String(value);
 
@@ -48,10 +48,10 @@ describe('Schema', function () {
       }).required(),
     });
 
-    console.log(schema.validate({ a: '1' }).getErrors());
-
     schema.validate({ a: '1' }).isValid().should.equals(true);
     schema.validate({ a: '-1' }).isValid().should.equals(false);
+    schema.validate({ a: {} }).isValid().should.equals(false);
+    schema.validate({ a: [] }).isValid().should.equals(false);
     schema.validate({}).isValid().should.equals(false);
     // schema.validate({}).isValid().should.equals(false);
   });

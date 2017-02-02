@@ -1,3 +1,7 @@
+# 0.5.2
+
+* added `Function.typeOf`
+
 # 0.5.1
 
 * added `Function` validation type
