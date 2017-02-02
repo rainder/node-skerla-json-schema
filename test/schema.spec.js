@@ -37,6 +37,25 @@ describe('Schema', function () {
     schema.validate({ a: 'string' }).getErrors()[0].message.should.match(/or Null/);
   });
 
+  it('should validate using custom logic', function () {
+    const schema = new V.Schema({
+      a: V(Function).fn((value, path) => {
+        const number = +value;
+        const string = String(value);
+
+        V(String).check(string, path);
+        V(Number).min(0).check(number, path);
+      }).required(),
+    });
+
+    console.log(schema.validate({ a: '1' }).getErrors());
+
+    schema.validate({ a: '1' }).isValid().should.equals(true);
+    schema.validate({ a: '-1' }).isValid().should.equals(false);
+    schema.validate({}).isValid().should.equals(false);
+    // schema.validate({}).isValid().should.equals(false);
+  });
+
   describe('array schema', function () {
     it('should validate pure array of strings', function () {
       const schema = new V.Schema(V(Array).typeOf(String));

@@ -1,3 +1,7 @@
+# 0.5.1
+
+* added `Function` validation type
+
 # 0.3.0
 
 * added `Schema.getSpecs()` method
